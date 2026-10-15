@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Round 2: AI-ready data architecture, priorities, trade-offs, milestones, and measurable actions for the first two weeks.">
+  <title>Master Architect | AI-ready enterprise</title>
+  <style>
+    :root{color-scheme:light;--bg:#e7edf4;--surface:#fff;--soft:#f4f8fc;--border:#cedae5;--text:#10243e;--muted:#46627e;--accent:#0078d4}
+    html[data-theme="dark"]{color-scheme:dark;--bg:#151b20;--surface:#20282f;--soft:#28333c;--border:#607383;--text:#f3f7fb;--muted:#bfcedb;--accent:#85c5ff}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100svh;display:grid;place-items:center;background:linear-gradient(155deg,var(--soft),var(--bg));color:var(--text);font-family:"Segoe UI",Aptos,Calibri,sans-serif}
+    [hidden]{display:none!important}
+    button{font:inherit;color:inherit;cursor:pointer}
+    button:disabled{opacity:.35;cursor:default}
+    button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    #shell{width:1280px;height:720px}
+    .deck{width:1280px;height:720px;display:grid;grid-template-rows:90px 46px minmax(0,1fr) 60px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;transform:scale(var(--scale,1));transform-origin:top left}
+    .head{padding:18px 30px;border-bottom:1px solid var(--border)}
+    .eyebrow{margin:0 0 5px 21px;font-size:12px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted)}
+    h1{margin:0;padding-left:17px;border-left:4px solid var(--accent);font-size:30px;line-height:1.2;font-weight:600}
+    nav{padding:0 25px;background:var(--soft);border-bottom:1px solid var(--border)}
+    nav ol{display:flex;gap:9px;height:100%;padding:0;margin:0;list-style:none}
+    nav li{flex:1}
+    nav button{width:100%;height:100%;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--muted);font-size:14px}
+    nav button[aria-current="step"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+    .slide{padding:24px 38px;min-height:0}
+    h2{font-size:27px;line-height:1.2;font-weight:650;margin:0 0 8px}
+    .subtitle{font-size:17px;line-height:1.4;color:var(--muted);margin:0 0 20px}
+    .columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .card{padding:18px 20px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+    .card.accent{border-top:4px solid var(--accent);background:var(--soft)}
+    h3{font-size:20px;line-height:1.25;margin:0 0 12px}
+    p,li{font-size:17px;line-height:1.45}
+    .card p{margin:0;color:var(--muted)}
+    ul{padding-left:20px;margin:0;color:var(--muted)}
+    li{margin:8px 0}
+    li::marker{color:var(--accent)}
+    .note{font-size:17px;line-height:1.45;color:var(--muted);margin:20px 0 0}
+    .entries{margin:0}
+    .entries dt{font-size:18px;font-weight:600;margin:16px 0 5px}
+    .entries dt:first-child{margin-top:0}
+    .entries dd{margin:0;font-size:16px;line-height:1.4;color:var(--muted)}
+    .priority{font-size:14px;font-weight:400;color:var(--muted)}
+    .tradeoffs{display:grid;gap:12px}
+    .tradeoff{display:grid;grid-template-columns:295px 1fr;gap:20px;padding:15px 18px;border:1px solid var(--border);border-radius:8px}
+    .tradeoff h3{font-size:19px;margin:0}
+    .tradeoff p{font-size:16px;line-height:1.4;color:var(--muted);margin:0}
+    .tradeoff p+p{margin-top:6px}
+    .milestones{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .milestones .card{min-height:270px}
+    .milestones h3{margin-top:10px}
+    .milestones .result{margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+    .index{font-size:14px;color:var(--accent);font-weight:600}
+    table{width:100%;border-collapse:collapse;font-size:16px;line-height:1.4}
+    th,td{text-align:left;vertical-align:top;padding:13px 16px;border:1px solid var(--border)}
+    th{background:var(--soft);font-weight:600}
+    th[scope="row"]{white-space:nowrap}
+    td{color:var(--muted)}
+    .criteria{margin-top:20px}
+    .criteria h3{font-size:19px;margin-bottom:8px}
+    .criteria ul{display:grid;grid-template-columns:1fr 1fr;column-gap:30px}
+    .criteria li{font-size:16px;margin:5px 0}
+    .chrome{display:flex;align-items:center;gap:12px;padding:9px 30px 12px;position:relative;border-top:1px solid var(--border)}
+    .program{font-size:13px;color:var(--muted)}
+    .controls{display:flex;align-items:center;gap:5px;margin-left:auto}
+    .control{border:1px solid var(--border);background:transparent;padding:6px 11px;border-radius:5px;font-size:13px}
+    .control:hover:not(:disabled){background:var(--soft);color:var(--accent)}
+    #counter{min-width:45px;text-align:center;font-size:13px;font-variant-numeric:tabular-nums}
+    .progress{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--border)}
+    .progress span{display:block;height:100%;background:var(--accent)}
+    @media screen and (max-width:720px){
+      body{display:block;background:var(--surface)}
+      #shell{width:100%!important;height:auto!important}
+      .deck{width:100%;height:auto;min-height:100svh;transform:none;border:0;border-radius:0;grid-template-rows:auto auto auto auto}
+      .head{padding:20px 16px}h1{font-size:24px}.eyebrow{font-size:10px}
+      nav{padding:0 10px}nav ol{flex-wrap:wrap;gap:0}nav li{flex:1 1 50%}nav button{min-height:44px;font-size:13px}
+      .slide{padding:24px 16px}h2{font-size:24px}
+      .columns,.milestones,.tradeoff,.criteria ul{grid-template-columns:1fr}
+      .milestones .card{min-height:0}
+      th,td{padding:9px 8px;font-size:14px}
+      .chrome{flex-wrap:wrap;padding:14px 16px 20px}.controls{flex-wrap:wrap;margin-left:0}
+    }
+    @media print{
+      @page{size:A4 landscape;margin:8mm}
+      html[data-theme]{color-scheme:light;--surface:#fff;--soft:#f4f8fc;--border:#cedae5;--text:#10243e;--muted:#46627e;--accent:#0078d4}
+      body{display:block;min-height:0;background:#fff}
+      #shell{width:auto!important;height:auto!important}
+      .deck{display:block;width:100%;height:auto;transform:none;border:0;overflow:visible}
+      .head{padding:10px 0}nav,.chrome{display:none!important}
+      .slide,.slide[hidden]{display:block!important;height:auto;overflow:visible;break-before:page;break-inside:avoid;padding:18px 0}
+      .slide:first-of-type{break-before:auto}
+      .card,.tradeoff,tr{break-inside:avoid}
+      .card.accent{background:#fff}
+      .milestones .card{min-height:0}
+      p,li{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+  <div id="shell">
+    <main class="deck" id="deck" aria-label="AI-ready enterprise presentation">
+      <header class="head">
+        <p class="eyebrow">Master Architect / Round 2: The AI-ready challenge</p>
+        <h1>From fragmented data to an AI-ready enterprise</h1>
+      </header>
+      <nav aria-label="Presentation slides">
+        <ol>
+          <li><button type="button" data-slide="0" aria-current="step">01 / Current and target state</button></li>
+          <li><button type="button" data-slide="1">02 / Priorities and blockers</button></li>
+          <li><button type="button" data-slide="2">03 / Trade-offs</button></li>
+          <li><button type="button" data-slide="3">04 / Initiatives</button></li>
+          <li><button type="button" data-slide="4">05 / First two weeks</button></li>
+        </ol>
+      </nav>
+      <section class="slide" aria-labelledby="state-title">
+        <h2 id="state-title">Current state and proposed target</h2>
+        <p class="subtitle">A global enterprise needs to enable AI across Engineering, HR, and Sales with consistent security, governance, and adoption.</p>
+        <div class="columns">
+          <article class="card">
+            <h3>Current state</h3>
+            <ul>
+              <li>Data silos across business units and regions.</li>
+              <li>Security gaps and inconsistent permissions.</li>
+              <li>No unified governance or lineage tracking.</li>
+              <li>Local AI pilots without an enterprise strategy.</li>
+            </ul>
+          </article>
+          <article class="card accent">
+            <h3>Proposed target</h3>
+            <dl class="entries">
+              <dt>Microsoft Fabric</dt><dd>Integrate priority data and provide trusted datasets for future AI workloads.</dd>
+              <dt>Microsoft Purview</dt><dd>Discover, classify, and catalog data; track ownership and supported lineage.</dd>
+              <dt>Azure Landing Zones and Microsoft Entra</dt><dd>Establish infrastructure guardrails and consistent identity and access controls.</dd>
+            </dl>
+          </article>
+        </div>
+        <p class="note">The target is a governed data estate, not an immediate migration of every source. Business domains retain responsibility for their data under shared policies.</p>
+      </section>
+      <section class="slide" aria-labelledby="priorities-title" hidden>
+        <h2 id="priorities-title">Three priority requirements and three blockers</h2>
+        <p class="subtitle">Address access controls, data accountability, and operating capacity before expanding AI use cases.</p>
+        <div class="columns">
+          <article class="card accent">
+            <h3>Non-functional requirements</h3>
+            <dl class="entries">
+              <dt>Security and identity <span class="priority">/ Critical</span></dt>
+              <dd>Use Entra ID, RBAC, data protection, and Landing Zone policies to enforce consistent access.</dd>
+              <dt>Data governance and quality <span class="priority">/ Critical</span></dt>
+              <dd>Use Purview for cataloging, classification, and lineage. Assign owners and define data-quality checks.</dd>
+              <dt>Scalability and reliability <span class="priority">/ High</span></dt>
+              <dd>Use Fabric for governed integration, with monitoring and processing capacity appropriate to workload growth.</dd>
+            </dl>
+          </article>
+          <article class="card">
+            <h3>Anticipated blockers and mitigation</h3>
+            <dl class="entries">
+              <dt>Fragmented data ownership</dt>
+              <dd>Unclear accountability reduces data quality. Assign domain owners and data stewards.</dd>
+              <dt>Inconsistent security controls</dt>
+              <dd>Unauthorized access creates regulatory exposure. Establish shared security baselines and access policies.</dd>
+              <dt>Organizational resistance</dt>
+              <dd>Limited adoption leaves AI initiatives disconnected. Use federated governance and shared success metrics.</dd>
+            </dl>
+          </article>
+        </div>
+      </section>
+      <section class="slide" aria-labelledby="tradeoffs-title" hidden>
+        <h2 id="tradeoffs-title">Architectural trade-offs and decisions</h2>
+        <p class="subtitle">Centralize policy, retain domain ownership, and integrate data selectively.</p>
+        <div class="tradeoffs">
+          <article class="tradeoff">
+            <h3>Centralized governance vs. business agility</h3>
+            <div><p>Central controls improve consistency but can slow innovation.</p><p><strong>Decision:</strong> Define policies centrally; delegate data ownership and implementation to business domains.</p></div>
+          </article>
+          <article class="tradeoff">
+            <h3>Data consolidation vs. data federation</h3>
+            <div><p>Moving every source increases migration cost, complexity, and disruption.</p><p><strong>Decision:</strong> Use Fabric to integrate priority data without requiring immediate migration of all sources.</p></div>
+          </article>
+          <article class="tradeoff">
+            <h3>Speed of adoption vs. enterprise readiness</h3>
+            <div><p>Rapid pilots can create disconnected solutions and governance gaps.</p><p><strong>Decision:</strong> Establish minimum security and governance controls, then expand through measurable use cases.</p></div>
+          </article>
+        </div>
+        <p class="note">Integration depends on source capabilities, permissions, connectivity, and regulatory restrictions. Validate these before choosing migration or federation for each dataset.</p>
+      </section>
+      <section class="slide" aria-labelledby="initiatives-title" hidden>
+        <h2 id="initiatives-title">Three initiatives and their milestones</h2>
+        <p class="subtitle">Connect the platform implementation to data ownership, operating responsibilities, and AI adoption.</p>
+        <div class="milestones">
+          <article class="card accent">
+            <span class="index">01</span>
+            <h3>Establish the secure foundation</h3>
+            <p>Apply Azure Landing Zone guardrails and Entra access controls. Configure Purview discovery, classification, and lineage for supported sources.</p>
+            <p class="result"><strong>Milestone:</strong> Security baseline approved; pilot sources cataloged and access controls tested.</p>
+          </article>
+          <article class="card accent">
+            <span class="index">02</span>
+            <h3>Build the governed data foundation</h3>
+            <p>Use Fabric to integrate priority domains. Assign owners and provide datasets with documented quality and access requirements.</p>
+            <p class="result"><strong>Milestone:</strong> A priority dataset is available through an approved integration with ownership and lineage documented.</p>
+          </article>
+          <article class="card accent">
+            <span class="index">03</span>
+            <h3>Establish the AI operating model</h3>
+            <p>Define responsibilities across security, data owners, platform operations, and business teams. Agree how use cases are approved and evaluated.</p>
+            <p class="result"><strong>Milestone:</strong> Responsibilities, approval process, and shared adoption metrics agreed.</p>
+          </article>
+        </div>
+        <p class="note">Start ownership and operating-model work alongside the secure foundation. Expand data integration and AI adoption after the pilot meets the agreed criteria.</p>
+      </section>
+      <section class="slide" aria-labelledby="weeks-title" hidden>
+        <h2 id="weeks-title">First two weeks: one use case and one secured integration</h2>
+        <p class="subtitle">Limit the pilot to accessible sources. Confirm permissions, connectivity, and platform availability before implementation.</p>
+        <table aria-label="First two weeks plan">
+          <thead><tr><th scope="col">Period</th><th scope="col">Action</th><th scope="col">Deliverable</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Week 1</th><td>Approve one priority AI use case. Assess data sources, sensitivity, ownership, and access requirements.</td><td>Data inventory, ownership map, and baseline KPIs.</td></tr>
+            <tr><th scope="row">Week 2</th><td>Implement a limited, secured integration using Fabric and Purview. Validate technical feasibility.</td><td>Working data integration with documented access controls, classification, and lineage.</td></tr>
+          </tbody>
+        </table>
+        <div class="criteria">
+          <h3>Proposed success criteria</h3>
+          <ul>
+            <li>One business use case prioritized and approved.</li>
+            <li>Every pilot dataset has an identified owner.</li>
+            <li>Every pilot access path tested against defined authorization requirements.</li>
+            <li>End-to-end lineage documented for the pilot flow, including unsupported automated segments.</li>
+            <li>Initial data-quality and operational metrics established.</li>
+          </ul>
+        </div>
+        <p class="note">Assess data readiness before expanding. The pilot is a data integration, not a production AI deployment.</p>
+      </section>
+      <footer class="chrome">
+        <span class="program">Master Architect / 2-minute briefing</span>
+        <div class="controls">
+          <button class="control" id="previous" type="button" aria-label="Previous slide" disabled>Back</button>
+          <span id="counter" aria-live="polite">1 / 5</span>
+          <button class="control" id="next" type="button" aria-label="Next slide">Next</button>
+          <button class="control" id="theme" type="button" aria-pressed="false">Dark theme</button>
+          <button class="control" id="fullscreen" type="button">Full screen</button>
+          <button class="control" id="print" type="button">Print / PDF</button>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="progress" style="width:20%"></span></div>
+      </footer>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const tabs = Array.from(document.querySelectorAll("[data-slide]"));
+      const previous = document.getElementById("previous");
+      const next = document.getElementById("next");
+      let current = 0;
+      function show(index) {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((slide, i) => { slide.hidden = i !== current; });
+        tabs.forEach((tab, i) => {
+          if (i === current) tab.setAttribute("aria-current", "step");
+          else tab.removeAttribute("aria-current");
+        });
+        previous.disabled = current === 0;
+        next.disabled = current === slides.length - 1;
+        document.getElementById("counter").textContent = `${current + 1} / ${slides.length}`;
+        document.getElementById("progress").style.width = `${(current + 1) / slides.length * 100}%`;
+      }
+      function resize() {
+        const shell = document.getElementById("shell");
+        if (window.innerWidth <= 720) {
+          shell.style.removeProperty("width");
+          shell.style.removeProperty("height");
+          return;
+        }
+        const scale = Math.min((window.innerWidth - 24) / 1280, (window.innerHeight - 24) / 720, 1.5);
+        document.getElementById("deck").style.setProperty("--scale", scale);
+        shell.style.width = `${1280 * scale}px`;
+        shell.style.height = `${720 * scale}px`;
+      }
+      tabs.forEach((tab, i) => tab.addEventListener("click", () => show(i)));
+      previous.addEventListener("click", () => show(current - 1));
+      next.addEventListener("click", () => show(current + 1));
+      document.getElementById("theme").addEventListener("click", (event) => {
+        const dark = document.documentElement.dataset.theme !== "dark";
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        event.currentTarget.setAttribute("aria-pressed", String(dark));
+        event.currentTarget.textContent = dark ? "Light theme" : "Dark theme";
+      });
+      const fullscreen = document.getElementById("fullscreen");
+      fullscreen.hidden = !document.fullscreenEnabled;
+      fullscreen.addEventListener("click", async () => {
+        try {
+          if (document.fullscreenElement) await document.exitFullscreen();
+          else await document.documentElement.requestFullscreen();
+        } catch (error) {
+          console.error("Presentation fullscreen request failed:", error);
+          alert("Full screen is unavailable. Use your browser's full-screen command.");
+        }
+      });
+      document.addEventListener("fullscreenchange", () => {
+        fullscreen.textContent = document.fullscreenElement ? "Exit full screen" : "Full screen";
+      });
+      document.getElementById("print").addEventListener("click", () => window.print());
+      document.addEventListener("keydown", (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+          event.preventDefault();
+          show(current + (event.key === "ArrowRight" ? 1 : -1));
+        }
+      });
+      window.addEventListener("resize", resize);
+      show(0);
+      resize();
+    })();
+  </script>
+</body>
+</html>
